@@ -23,8 +23,7 @@ def filter_datum(fields: List[str], redaction: str,
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
-        """
+    """ Redacting class """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -63,7 +62,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
 
     x = mysql.connector.connection.MySQLConnection(user=username,
-                                                     password=password,
-                                                     host=host,
-                                                     database=db_name)
+                                                   password=password,
+                                                   host=host,
+                                                   database=db_name)
     return x

@@ -56,13 +56,34 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Connect to secure database """
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
     username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    db_name = os.getenv("PERSONAL_DATA_DB_NAME")
 
     x = mysql.connector.connect(user=username,
                                 password=password,
                                 host=host,
                                 database=db_name)
     return x
+
+
+def main() -> None:
+    """ Read and filter data """
+    logger = get_logger()
+    logger.setLevel(logging.INFO)
+
+    db = get_db()
+    cursor = db.cursor()
+
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+
+    for row in rows:
+        message = "; ".join([f"{field}={row[field]}" for field in row.keys()])
+        logger.info(filter_datum(PII_FIELDS, RedactingFormatter.REDACTION,
+                                 message, RedactingFormatter.SEPARATOR))
+
+
+if __name__ == "__main__":
+    main()

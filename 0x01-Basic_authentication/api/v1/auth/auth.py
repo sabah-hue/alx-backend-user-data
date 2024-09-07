@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
+from flask import request
 """ Module of Auth
 """
-import request from flask
 
 
 class Auth:
